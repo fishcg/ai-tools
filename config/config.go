@@ -6,7 +6,7 @@ import (
 	"gopkg.in/yaml.v2"
 
 	"github.com/fish/ai-tools/db"
-	"github.com/fish/ai-tools/service/gpt"
+	"github.com/fish/ai-tools/service/openai"
 )
 
 // Conf 全局配置文件
@@ -14,9 +14,9 @@ var Conf *Config
 
 // Config config structure
 type Config struct {
-	GPT  *gpt.Config `yaml:"gpt"`
-	HTTP SectionHTTP `yaml:"http"`
-	DB   db.Config   `yaml:"db"`
+	OpenAI *openai.Config `yaml:"openai"`
+	HTTP   SectionHTTP    `yaml:"http"`
+	DB     db.Config      `yaml:"db"`
 }
 
 // SectionHTTP .

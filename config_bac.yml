@@ -6,7 +6,7 @@ http:
   port: 8999
   mode: 'release' # `debug` or `release`, default: 'release'
 
-gpt:
+openai:
   token: 'test'
 
 db:

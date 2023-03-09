@@ -9,7 +9,7 @@ import (
 	"github.com/fish/ai-tools/controllers/helper"
 	"github.com/fish/ai-tools/controllers/helper/action"
 	"github.com/fish/ai-tools/service"
-	"github.com/fish/ai-tools/service/gpt"
+	"github.com/fish/ai-tools/service/openai"
 )
 
 func NewController() *helper.Controller {
@@ -42,10 +42,10 @@ func actionGet(c *helper.Context) (*helper.HTMLResp, helper.RespInfo, error) {
 
 	var res string
 	switch scene {
-	case gpt.SceneFreeChat:
-		res, err = service.Gpt.FreeChat(content)
-	case gpt.SceneTextLint:
-		res, err = service.Gpt.TextLint(content)
+	case openai.SceneFreeChat:
+		res, err = service.OpenAI.FreeChat(content)
+	case openai.SceneTextLint:
+		res, err = service.OpenAI.TextLint(content)
 	default:
 		// TODO: Support for more scenarios
 		return nil, nil, helper.ErrInvalidParam

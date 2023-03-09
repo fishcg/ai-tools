@@ -5,12 +5,12 @@ import (
 
 	"github.com/fish/ai-tools/config"
 	"github.com/fish/ai-tools/db"
-	"github.com/fish/ai-tools/service/gpt"
+	"github.com/fish/ai-tools/service/openai"
 )
 
 var (
-	DB  *gorm.DB
-	Gpt *gpt.Client
+	DB     *gorm.DB
+	OpenAI *openai.Client
 )
 
 func Init(conf *config.Config) (err error) {
@@ -19,7 +19,7 @@ func Init(conf *config.Config) (err error) {
 		return err
 	}
 
-	Gpt = gpt.NewClient(conf.GPT)
+	OpenAI = openai.NewClient(conf.OpenAI)
 	if err != nil {
 		return err
 	}

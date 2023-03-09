@@ -1,11 +1,11 @@
-package gpt
+package openai
 
 import (
 	"context"
 	"errors"
 	"fmt"
 
-	gogpt "github.com/sashabaranov/go-gpt3"
+	goopenai "github.com/sashabaranov/go-openai"
 )
 
 // Doc: https://platform.openai.com/docs/guides/chat
@@ -28,13 +28,13 @@ type Config struct {
 
 // Client wraps the CommonAPI client
 type Client struct {
-	*gogpt.Client
+	*goopenai.Client
 }
 
 // NewClient returns a new Client
 func NewClient(conf *Config) (c *Client) {
 	return &Client{
-		gogpt.NewClient(conf.Token),
+		goopenai.NewClient(conf.Token),
 	}
 }
 
@@ -69,22 +69,18 @@ var promptTextLint = `You are a text format checker，please output chinese. Whe
 func (c *Client) TextLint(content string) (string, error) {
 	ctx := context.Background()
 	content = formatContent(content, SceneTextLint)
-	req := gogpt.ChatCompletionRequest{
-		Model:     gogpt.GPT3Dot5Turbo0301,
+	req := goopenai.ChatCompletionRequest{
+		Model:     goopenai.GPT3Dot5Turbo0301,
 		MaxTokens: 1000,
-		Messages: []gogpt.ChatCompletionMessage{
+		Messages: []goopenai.ChatCompletionMessage{
 			{
-				Role:    "system",
+				Role:    goopenai.ChatMessageRoleSystem,
 				Content: promptTextLint,
 			},
 			{
-				Role:    "user",
+				Role:    goopenai.ChatMessageRoleUser,
 				Content: content,
 			},
-			/*{
-				Role:    "assistant",
-				Content: promptTextLint,
-			},*/
 		},
 	}
 	resp, err := c.CreateChatCompletion(ctx, req)
@@ -103,16 +99,16 @@ var promptFreeChat = "You should say Chinese"
 func (c *Client) FreeChat(content string) (string, error) {
 	ctx := context.Background()
 	content = formatContent(content, SceneFreeChat)
-	req := gogpt.ChatCompletionRequest{
-		Model:     gogpt.GPT3Dot5Turbo0301,
+	req := goopenai.ChatCompletionRequest{
+		Model:     goopenai.GPT3Dot5Turbo0301,
 		MaxTokens: 1000,
-		Messages: []gogpt.ChatCompletionMessage{
+		Messages: []goopenai.ChatCompletionMessage{
 			{
-				Role:    "system",
+				Role:    goopenai.ChatMessageRoleSystem,
 				Content: promptFreeChat,
 			},
 			{
-				Role:    "user",
+				Role:    goopenai.ChatMessageRoleUser,
 				Content: content,
 			},
 		},

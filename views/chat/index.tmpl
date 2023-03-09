@@ -64,13 +64,11 @@
     <select v-model="scene">
         <option value="1">自由聊天</option>
         <option value="2">文本规范检查 beta</option>
-        <option value="3">PHP 单元测试生成（todo）</option>
-        <option value="4">Go 单元测试生成（todo）</option>
     </select>
     <br />
-    <input class="query btn" name="query" type="button" value="查 询" @click="check()" />
+    <input class="query btn" name="query" type="button" value="发 送" @click="check()" />
     <div id="check-result" v-cloak>
-        <div class="title">查询结果</div>
+        <div class="title">回 答</div>
         <div id="result" class="result" v-html="checkResult">
         </div>
     </div>
