@@ -1,0 +1,111 @@
+{{ define "chat/index.tmpl" }}
+<html>
+
+<style type="text/css">
+    #scan{
+        width: 92%;
+        margin: auto;
+    }
+    .text-content {
+        height: 300px;
+        margin-top: 10px;
+        width: 100%;
+    }
+
+    .title {
+        font-size: 20px;
+        margin-top: 20px;
+    }
+
+    .result ul {
+        border: 2px solid #000;
+        font-size: 15px;
+        list-style-type: none;
+        margin-top: 15px;
+        min-height: 50px;
+        padding: 5px 30px;
+        width: 100%;
+    }
+
+    .normal {
+        background: #e4ffdd;
+    }
+
+    .illegal {
+        background: #ffded8;
+    }
+
+    .query {
+        background: #4dcb85;
+        border: 0;
+        color: #fff;
+        height: 30px;
+        margin-top: 10px;
+        width: 90px;
+    }
+    .query:hover{
+        cursor: pointer;
+    }
+    [v-cloak] {
+        display: none;
+    }
+</style>
+
+<div id="scan">
+    <div class="title">
+        请输入要处理的内容
+    </div>
+    <textarea id="content" class="text-content" v-model="content" placeholder="请输入要处理的内容"
+              required="required">
+    </textarea>
+    <div class="title">
+        请选择要处理的场景
+    </div>
+    <select v-model="scene">
+        <option value="1">自由聊天</option>
+        <option value="2">文本规范检查 beta</option>
+        <option value="3">PHP 单元测试生成（todo）</option>
+        <option value="4">Go 单元测试生成（todo）</option>
+    </select>
+    <br />
+    <input class="query btn" name="query" type="button" value="查 询" @click="check()" />
+    <div id="check-result" v-cloak>
+        <div class="title">查询结果</div>
+        <div id="result" class="result" v-html="checkResult">
+        </div>
+    </div>
+</div>
+<script src="http://s1.acgay.cn/tool/vue.js"></script>
+<script>
+    new Vue({
+        el: '#scan',
+        data: {
+            content: '',
+            checkResult: '',
+            scene: 1,
+        },
+        methods: {
+            check: function () {
+                if (this.content === '') {
+                    alert('请输入要查询的文本')
+                    return
+                }
+                this.checkResult = '请等待查询结果...'
+                this.$http.get('get', { params: { content: this.content, scene: this.scene } },
+                    { emulateJSON: true }).then(function (res) {
+                    var data = res.data
+                    if (data.code === 0) {
+                        // 文本违规检测弹窗在 moTool.showLoad() 之后，未调用 moTool 方法，需调用 moTool.hideLoad() 关闭弹窗
+                        this.checkResult = data.info
+                    } else {
+                        alert(data.info)
+                    }
+                }, function(err){
+                    alert(err.statusText)
+                })
+            },
+        },
+    })
+</script>
+</html>
+{{ end }}
