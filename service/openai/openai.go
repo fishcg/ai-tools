@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strings"
 
 	goopenai "github.com/sashabaranov/go-openai"
 )
@@ -14,6 +15,10 @@ import (
 const (
 	SceneFreeChat = iota + 1
 	SceneTextLint
+	SceneVariable2Name
+	SceneTranslate
+	SceneGoUnitTestFunc
+	ScenePHPUnitTestFunc
 )
 
 var (
@@ -90,7 +95,7 @@ func (c *Client) TextLint(content string) (string, error) {
 	if len(resp.Choices) == 0 || resp.Choices[0].Message.Content == "" {
 		return "", errOpenAIResp
 	}
-	return resp.Choices[0].Message.Content, nil
+	return strings.Replace(resp.Choices[0].Message.Content, "\n", "<br>", -1), nil
 }
 
 var promptFreeChat = "You should say Chinese"
@@ -120,5 +125,38 @@ func (c *Client) FreeChat(content string) (string, error) {
 	if len(resp.Choices) == 0 || resp.Choices[0].Message.Content == "" {
 		return "", errOpenAIResp
 	}
-	return resp.Choices[0].Message.Content, nil
+	return strings.Replace(resp.Choices[0].Message.Content, "\n", "<br>", -1), nil
+}
+
+var promptTranslate = "你是一个翻译器，将输入的文本翻译为英文，遵循以下规则：" +
+	"1.仅输入翻译后的语句本身;" +
+	"2. 句子首字母不需要大写" +
+	"2. \"剧集\"翻译为 drama, \"音单\" 翻译为 album, \"音频\" 翻译为 sound, \"关注\" 翻译为 follow, \"动态\" 翻译为 feed, \"消息\" 翻译为 msg, \"提醒\" 翻译为 notice"
+
+// Translate .
+func (c *Client) Translate(content string) (string, error) {
+	ctx := context.Background()
+	content = formatContent(content, SceneFreeChat)
+	req := goopenai.ChatCompletionRequest{
+		Model:     goopenai.GPT3Dot5Turbo0301,
+		MaxTokens: 1000,
+		Messages: []goopenai.ChatCompletionMessage{
+			{
+				Role:    goopenai.ChatMessageRoleSystem,
+				Content: promptTranslate,
+			},
+			{
+				Role:    goopenai.ChatMessageRoleUser,
+				Content: content,
+			},
+		},
+	}
+	resp, err := c.CreateChatCompletion(ctx, req)
+	if err != nil {
+		return "", err
+	}
+	if len(resp.Choices) == 0 || resp.Choices[0].Message.Content == "" {
+		return "", errOpenAIResp
+	}
+	return strings.Replace(resp.Choices[0].Message.Content, "\n", "<br>", -1), nil
 }

@@ -2,7 +2,6 @@ package chat
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 
@@ -46,6 +45,14 @@ func actionGet(c *helper.Context) (*helper.HTMLResp, helper.RespInfo, error) {
 		res, err = service.OpenAI.FreeChat(content)
 	case openai.SceneTextLint:
 		res, err = service.OpenAI.TextLint(content)
+	case openai.SceneVariable2Name:
+		res, err = service.OpenAI.CodeVariable2Name(content)
+	case openai.SceneTranslate:
+		res, err = service.OpenAI.Translate(content)
+	case openai.SceneGoUnitTestFunc:
+		res, err = service.OpenAI.CodeCreateGoUnitTestFunc(content)
+	case openai.ScenePHPUnitTestFunc:
+		res, err = service.OpenAI.CodeCreatePHPUnitTestFunc(content)
 	default:
 		// TODO: Support for more scenarios
 		return nil, nil, helper.ErrInvalidParam
@@ -54,7 +61,6 @@ func actionGet(c *helper.Context) (*helper.HTMLResp, helper.RespInfo, error) {
 		fmt.Println(err)
 		return nil, nil, helper.ErrInternalServerError
 	}
-	res = strings.Replace(res, "\n", "<br>", -1)
 	return nil, res, nil
 }
 

@@ -1,5 +1,8 @@
 {{ define "chat/index.tmpl" }}
 <html>
+<head>
+    <link rel="stylesheet" href="http://s1.acgay.cn/tool/heightlight_default.min.css">
+</head>
 
 <style type="text/css">
     #scan{
@@ -63,43 +66,64 @@
     </div>
     <select v-model="scene">
         <option value="1">自由聊天</option>
+        <option value="4">中译英</option>
+        <option value="3">编程变量命名</option>
         <option value="2">文本规范检查 beta</option>
+        <option value="5">Go 单元测试 beta</option>
+        <option value="6">PHP 单元测试 beta</option>
     </select>
     <br />
     <input class="query btn" name="query" type="button" value="发 送" @click="check()" />
     <div id="check-result" v-cloak>
         <div class="title">回 答</div>
-        <div id="result" class="result" v-html="checkResult">
-        </div>
+        <div id="result" class="result" v-html="checkResult"></div>
     </div>
 </div>
+
 <script src="http://s1.acgay.cn/tool/vue.js"></script>
+<script src="http://s1.acgay.cn/tool/highlight.min.js"></script>
+
 <script>
+    hljs.highlightAll()
     new Vue({
         el: '#scan',
         data: {
             content: '',
             checkResult: '',
             scene: 1,
+            canClick: true,
         },
         methods: {
             check: function () {
+                if (!this.canClick) {
+                    return
+                }
                 if (this.content === '') {
                     alert('请输入要查询的文本')
                     return
                 }
                 this.checkResult = '请等待查询结果...'
+                this.canClick = false
                 this.$http.get('get', { params: { content: this.content, scene: this.scene } },
                     { emulateJSON: true }).then(function (res) {
                     var data = res.data
                     if (data.code === 0) {
-                        // 文本违规检测弹窗在 moTool.showLoad() 之后，未调用 moTool 方法，需调用 moTool.hideLoad() 关闭弹窗
                         this.checkResult = data.info
+                        document.querySelectorAll('code').forEach((el) => {
+                            console.log(23333)
+                            hljs.highlightElement(el)
+                        });
                     } else {
                         alert(data.info)
                     }
+                    this.canClick = true
                 }, function(err){
                     alert(err.statusText)
+                    this.canClick = true
+                }).finally(function () {
+                    document.querySelectorAll('pre code').forEach((el) => {
+                        hljs.highlightElement(el)
+                    });
                 })
             },
         },
