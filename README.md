@@ -11,12 +11,14 @@ golang 1.17 or above
 ```sh
 # build
 go build
-# config
+
+# 复制 config 并对其进行修改
 cp config_bac.yml config.yml
+
 # run
-./go 
+./ai-tools
 ```
 
 ## Result Presentation
-
+> 访问 localhost:8999/chat/index
 ![image](https://user-images.githubusercontent.com/26989449/224004234-a1d545d2-3427-4d93-b9b1-ccbe156b05f5.png)
