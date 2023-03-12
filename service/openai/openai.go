@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net/http"
+	"net/url"
 	"strings"
 
 	goopenai "github.com/sashabaranov/go-openai"
@@ -29,6 +31,7 @@ var (
 type Config struct {
 	// TODO: yaml 解析字段暂未改动
 	Token string `yaml:"token"`
+	Proxy string `yaml:"proxy"`
 }
 
 // Client wraps the CommonAPI client
@@ -38,8 +41,23 @@ type Client struct {
 
 // NewClient returns a new Client
 func NewClient(conf *Config) (c *Client) {
+	config := goopenai.DefaultConfig(conf.Token)
+
+	if conf.Proxy != "" {
+		proxyUrl, err := url.Parse(conf.Proxy)
+		if err != nil {
+			panic(err)
+		}
+		transport := &http.Transport{
+			Proxy: http.ProxyURL(proxyUrl),
+		}
+		config.HTTPClient = &http.Client{
+			Transport: transport,
+		}
+	}
+
 	return &Client{
-		goopenai.NewClient(conf.Token),
+		goopenai.NewClientWithConfig(config),
 	}
 }
 
