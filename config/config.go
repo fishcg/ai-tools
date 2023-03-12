@@ -1,9 +1,8 @@
 package config
 
 import (
-	"io/ioutil"
-
 	"gopkg.in/yaml.v2"
+	"os"
 
 	"github.com/fish/ai-tools/db"
 	"github.com/fish/ai-tools/service/openai"
@@ -29,7 +28,7 @@ type SectionHTTP struct {
 
 // LoadFromYML load config from yml file
 func LoadFromYML(configPath string) error {
-	file, err := ioutil.ReadFile(configPath)
+	file, err := os.ReadFile(configPath)
 	if err != nil {
 		return err
 	}

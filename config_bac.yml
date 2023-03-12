@@ -6,6 +6,7 @@ http:
   port: 8999
   mode: 'release' # `debug` or `release`, default: 'release'
 
+# you can get your own token from "https://platform.openai.com/account/api-keys"
 openai:
   token: 'test'
 

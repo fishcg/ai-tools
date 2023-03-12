@@ -1,2 +1,8 @@
+# config
 /config.yml
-./idea
+
+# ide
+.idea
+
+# exec file
+ai-tools
