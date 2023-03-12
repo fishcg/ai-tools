@@ -9,14 +9,15 @@ http:
 # you can get your own token from "https://platform.openai.com/account/api-keys"
 openai:
   token: 'test'
+  # proxy: 'proxy'
 
-db:
-  user: mysql_user
-  pass: mysql_password
-  host: 127.0.0.1
-  port: 3306
-  name: db_name
-  max_idle_conns: 4
-  max_open_conns: 10
-  max_life_time: '3600s'
-  debug: true
+#db:
+#  user: mysql_user
+#  pass: mysql_password
+#  host: 127.0.0.1
+#  port: 3306
+#  name: db_name
+#  max_idle_conns: 4
+#  max_open_conns: 10
+#  max_life_time: '3600s'
+#  debug: true

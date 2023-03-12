@@ -1,10 +1,10 @@
 package service
 
 import (
+	// "github.com/fish/ai-tools/db"
 	"github.com/jinzhu/gorm"
 
 	"github.com/fish/ai-tools/config"
-	"github.com/fish/ai-tools/db"
 	"github.com/fish/ai-tools/service/openai"
 )
 
@@ -14,14 +14,16 @@ var (
 )
 
 func Init(conf *config.Config) (err error) {
-	DB, err = db.InitDatabase((*db.Config)(&conf.DB))
-	if err != nil {
-		return err
-	}
-
 	OpenAI = openai.NewClient(conf.OpenAI)
 	if err != nil {
 		return err
 	}
+
+	// TODO: 添加 DB 用于存储调整 prompt
+	// DB, err = db.InitDatabase(&conf.DB)
+	// if err != nil {
+	//     return err
+	// }
+
 	return nil
 }
