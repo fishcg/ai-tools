@@ -45,7 +45,7 @@ func NewAction(method action.Method, actionFunc ActionFunc) *Action {
 
 			if err != nil {
 				switch v := err.(type) {
-				case (HTTPError):
+				case HTTPError:
 					AbortWithError(c, v, requestID)
 				default:
 					AbortWithError(c, ErrInternalServerError, requestID)
