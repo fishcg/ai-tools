@@ -34,7 +34,7 @@ func (c *Client) CodeVariable2Name(content string) (string, error) {
 		return "", err
 	}
 	if len(resp.Choices) == 0 || resp.Choices[0].Message.Content == "" {
-		return "", errOpenAIResp
+		return "", ErrOpenAIResp
 	}
 	return resp.Choices[0].Message.Content, nil
 }
@@ -92,7 +92,7 @@ func (c *Client) codeCreateUnitTestFunc(content string, scene int64) (string, er
 		return "", err
 	}
 	if len(resp.Choices) == 0 || resp.Choices[0].Message.Content == "" {
-		return "", errOpenAIResp
+		return "", ErrOpenAIResp
 	}
 	return fmt.Sprintf("%s%s%s", "<pre><code class=\"launght\">", resp.Choices[0].Message.Content, "</code></pre>"), nil
 }

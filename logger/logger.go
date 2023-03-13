@@ -5,7 +5,7 @@ import (
 )
 
 func Error(s string) {
-	fmt.Printf(s)
+	fmt.Println(s)
 }
 
 func Errorf(s string, v interface{}) {
@@ -13,9 +13,9 @@ func Errorf(s string, v interface{}) {
 }
 
 func Debug(s string) {
-	fmt.Print(s)
+	fmt.Println(s)
 }
 
 func Info(s string) {
-	fmt.Print(s)
+	fmt.Println(s)
 }

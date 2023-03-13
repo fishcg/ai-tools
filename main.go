@@ -39,7 +39,7 @@ func initFlag() {
 
 func main() {
 	srv := server.NewHTTPServer(&config.Conf.HTTP)
-	srv.Run(controllers.MountGame)
+	srv.Run(controllers.MountChat)
 	shutdownServer(srv)
 }
 

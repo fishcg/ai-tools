@@ -24,7 +24,7 @@ const (
 )
 
 var (
-	errOpenAIResp = errors.New("OpenAI API resp error")
+	ErrOpenAIResp = errors.New("OpenAI API resp error")
 )
 
 // Config contains configuration for Client
@@ -111,12 +111,12 @@ func (c *Client) TextLint(content string) (string, error) {
 		return "", err
 	}
 	if len(resp.Choices) == 0 || resp.Choices[0].Message.Content == "" {
-		return "", errOpenAIResp
+		return "", ErrOpenAIResp
 	}
 	return strings.Replace(resp.Choices[0].Message.Content, "\n", "<br>", -1), nil
 }
 
-var promptFreeChat = "You should say Chinese"
+var PromptFreeChat = "You should say Chinese"
 
 // FreeChat .
 func (c *Client) FreeChat(content string) (string, error) {
@@ -128,7 +128,7 @@ func (c *Client) FreeChat(content string) (string, error) {
 		Messages: []goopenai.ChatCompletionMessage{
 			{
 				Role:    goopenai.ChatMessageRoleSystem,
-				Content: promptFreeChat,
+				Content: PromptFreeChat,
 			},
 			{
 				Role:    goopenai.ChatMessageRoleUser,
@@ -141,7 +141,7 @@ func (c *Client) FreeChat(content string) (string, error) {
 		return "", err
 	}
 	if len(resp.Choices) == 0 || resp.Choices[0].Message.Content == "" {
-		return "", errOpenAIResp
+		return "", ErrOpenAIResp
 	}
 	return strings.Replace(resp.Choices[0].Message.Content, "\n", "<br>", -1), nil
 }
@@ -174,7 +174,7 @@ func (c *Client) Translate(content string) (string, error) {
 		return "", err
 	}
 	if len(resp.Choices) == 0 || resp.Choices[0].Message.Content == "" {
-		return "", errOpenAIResp
+		return "", ErrOpenAIResp
 	}
 	return strings.Replace(resp.Choices[0].Message.Content, "\n", "<br>", -1), nil
 }

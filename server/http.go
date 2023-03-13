@@ -33,6 +33,7 @@ type HTTPServer struct {
 func NewHTTPServer(conf *config.SectionHTTP) *HTTPServer {
 	gin.SetMode(conf.Mode)
 	r := gin.Default()
+
 	// FIXME: I don't understand why not effective!
 	// r.Delims("[[", "]]")
 	r.LoadHTMLGlob("views/**/*")
