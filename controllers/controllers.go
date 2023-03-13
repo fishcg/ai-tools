@@ -7,7 +7,7 @@ import (
 	"github.com/fish/ai-tools/controllers/helper"
 )
 
-// Mount mount server level middlerwares and controllers
+// Mount server level middlerwares and controllers
 type Mount func(r *gin.Engine)
 
 // MountGame mount all controllers for game server
