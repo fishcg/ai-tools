@@ -1,10 +1,10 @@
 package service
 
 import (
-	// "github.com/fish/ai-tools/db"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/fish/ai-tools/config"
+	_ "github.com/fish/ai-tools/db"
 	"github.com/fish/ai-tools/service/openai"
 )
 

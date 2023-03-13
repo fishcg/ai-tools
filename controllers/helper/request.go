@@ -8,8 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var test int
-
 type Context struct {
 	C          *gin.Context
 	CreateOnce sync.Once

@@ -13,9 +13,9 @@ import (
 
 func NewController() *helper.Controller {
 	return &helper.Controller{
-		"chat",
-		gin.HandlersChain{},
-		action.Actions{
+		Path:        "chat",
+		Middlewares: gin.HandlersChain{},
+		Actions: action.Actions{
 			"/index": helper.NewAction(action.GET, actionIndex),
 			"/get":   helper.NewAction(action.GET, actionGet),
 			"/error": helper.NewAction(action.GET, actionError),
