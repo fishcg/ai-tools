@@ -1,16 +1,14 @@
 package db
 
 import (
-	"database/sql"
-	_ "database/sql" // used by gorm
 	"errors"
 	"fmt"
 	"strconv"
 	"strings"
 	"time"
 
-	_ "github.com/go-sql-driver/mysql" // used by gorm
-	"github.com/jinzhu/gorm"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 // Drivers
@@ -21,14 +19,6 @@ const (
 	defaultDriver = DriverMysql
 )
 
-// Driver 当前使用的 driver
-var Driver = defaultDriver
-
-var errParams = "Incorrect parameter count"
-
-// ErrNoRowsAffected is the error of did not affect any rows in one operation.
-var ErrNoRowsAffected = errors.New("no rows affected")
-
 const (
 	// https://github.com/go-sql-driver/mysql#charset 对于旧版本 MySQL 会自动使用 utf8
 	defaultCharset   = "utf8mb4,utf8"
@@ -36,9 +26,17 @@ const (
 	defaultLoc       = "Local"
 )
 
+const errParams = "Incorrect parameter count"
+
+// Driver 当前使用的 driver
+var Driver = defaultDriver
+
+// ErrNoRowsAffected is the error of did not affect any rows in one operation.
+var ErrNoRowsAffected = errors.New("no rows affected")
+
 // IsErrNoRows 是否是未查询到数据
 func IsErrNoRows(err error) bool {
-	return err == sql.ErrNoRows || gorm.IsRecordNotFoundError(err) //nolint:bannedfunc
+	return errors.Is(err, gorm.ErrRecordNotFound)
 }
 
 // Config for database config
@@ -61,26 +59,21 @@ func InitDatabase(conf *Config) (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-	driver, dsn, err := conf.getDriverAndDSN()
+	_, dsn, err := conf.getDriverAndDSN()
 	if err != nil {
 		return nil, err
 	}
-	db, err := gorm.Open(driver, dsn)
+	db, err := gorm.Open(mysql.New(mysql.Config{DSN: dsn}), &gorm.Config{})
 	if err != nil {
 		return nil, err
 	}
-	db = db.BlockGlobalUpdate(true)
 	if conf.Debug {
 		db = db.Debug()
 	}
-
-	sqldb := db.DB()
-	err = sqldb.Ping()
+	sqldb, err := db.DB()
 	if err != nil {
-		db.Close()
 		return nil, err
 	}
-
 	sqldb.SetMaxIdleConns(conf.MaxIdleConns)
 	// Fix db invalid connection after EOF
 	sqldb.SetConnMaxLifetime(maxLifeTime)

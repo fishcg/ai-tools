@@ -1,9 +1,11 @@
 package helper
 
 import (
-	"github.com/fish/ai-tools/controllers/helper/action"
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
+
+	"github.com/fish/ai-tools/controllers/helper/action"
 )
 
 type Action struct {
@@ -27,7 +29,7 @@ func (a *Action) GetMethod() action.Method {
 }
 
 func NewAction(method action.Method, actionFunc ActionFunc) *Action {
-	action := &Action{
+	return &Action{
 		method: method,
 		handler: func(c *gin.Context) {
 			// TODO: 实现 Request ID
@@ -61,7 +63,6 @@ func NewAction(method action.Method, actionFunc ActionFunc) *Action {
 			}
 		},
 	}
-	return action
 }
 
 func AbortWithError(c *gin.Context, err HTTPError, requestID string) {

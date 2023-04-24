@@ -1,8 +1,11 @@
+.DS_Store
+
 # config
 /config.yml
 
 # ide
 .idea
+.vscode
 
 # exec file
 ai-tools
